@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+- Optional **Status** section for projects with a phased plan/roadmap doc (`spec.md`, `ROADMAP.md`, `docs/plans/`) — verified against code/tests/git history rather than the plan's own checkboxes
+- Optional **Limitations** section for verified, already-true gaps (distinct from Roadmap, which is prospective)
+- Config drift check in Step 1: cross-reference each CI-invoked tool (lint/type-check/test/build) against the dependency manifest, and treat a Development/CI section describing a broken step as Weak rather than Strong/Adequate in improve mode
 - Add --version flag support, reporting installed version and a best-effort GitHub update check
 - README `## Changelog` section linking to `CHANGELOG.md`
 - Help-mechanism (`--help`/`:help` + `help.md`) generation as a companion file, with a README pointer to it added automatically

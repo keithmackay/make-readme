@@ -35,7 +35,9 @@ Scan the project root and gather information from these sources. Read files wher
 
 **Directory structure**: Run `ls -la` at root and note key directories (src/, lib/, tests/, docs/, examples/, .github/, packages/, apps/).
 
-**CI/CD config**: `.github/workflows/*.yml`, `.gitlab-ci.yml`, `Jenkinsfile`, `.circleci/config.yml`, `.travis.yml`
+**CI/CD config**: `.github/workflows/*.yml`, `.gitlab-ci.yml`, `Jenkinsfile`, `.circleci/config.yml`, `.travis.yml`. For each command a workflow actually runs (lint, type-check, test, build), confirm the tool it invokes is declared in the dependency manifest or explicitly installed by the workflow (e.g. a separate `pip install`/`npm install -g` step, or an `actions/setup-*` action known to bundle it). A step that shells out to a tool nothing installs is very likely broken — note this as a finding rather than describing the pipeline as working in Step 4d or 5b.
+
+**Phased plan or roadmap docs**: a spec/plan file with numbered phases or milestones — `spec.md`, `ROADMAP.md`, `docs/plans/`, a PRD, or similar. If found, this feeds the optional Status section (Step 4b) — do not just copy its checkboxes; verify each phase against the code, tests, and git history (see Status generation rules in Step 4d).
 
 **Existing documentation**: `README.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `CHANGELOG.md`, `SECURITY.md`, `LICENSE`, `docs/`
 
@@ -109,6 +111,8 @@ Choose which sections to include based on the project:
 - **Configuration**: Only if `.env.example`, config files, or environment variables are detected. Use table format.
 - **Architecture**: Only for monorepos or complex projects — describe package/module structure
 - **Roadmap**: Only if there's evidence (GitHub milestones, TODO comments, roadmap file)
+- **Status**: Only if the project has an explicit phased plan (see Step 1). One row per phase, verified against code/tests/git history — not the plan doc's own checkboxes
+- **Limitations**: Only for concrete, already-true gaps or deliberate scope cuts you've verified are real — not prospective work (that's Roadmap)
 - **Acknowledgments**: Only if the project clearly builds on other notable work
 
 ### 4c: Dry-Run Check
@@ -204,6 +208,17 @@ Follow these rules for each section:
 - Bullet list of planned features or improvements
 - Use checkbox format: `- [ ] Feature name`
 
+**Status** (phased projects only)
+- Table format: `Phase | What it covers | Status`
+- Status values: `Done`, `In progress`, `Not started`, or a short caveat in place of a bare status (e.g. "Done, unverified" for code that exists but has no evidence of ever having run — no passing test, no log, no deploy record)
+- Verify every phase against the code, tests, and git history — never report a phase's status from the plan doc's own checkboxes alone
+- If the plan doc's checkboxes disagree with what the code/tests actually show, trust the code and say so in one line rather than silently picking a side
+- If work happened out of the plan's declared order (a later phase done before an earlier one), say so plainly instead of reordering the table to look sequential
+
+**Limitations**
+- Bullet list, one line each: what's missing or narrower than it looks, and the concrete reason (a real constraint you found — a missing field, an unimplemented fallback, an external dependency that was never wired up)
+- Only include gaps you've verified by reading the code — don't speculate or hedge with maybes
+
 ### 4e: Assemble and Present
 
 1. Assemble all sections in the order listed above
@@ -236,6 +251,8 @@ For each section in the menu (Step 4b), assign a score:
 - **Adequate**: Correct but could be richer. Leave it alone (minor polish at most).
 - **Weak**: Present but thin, vague, or missing key information. Enhance it.
 - **Missing**: Not present at all. Generate it.
+
+A Development/CI section that describes a lint, type-check, test, or build step is not automatically Strong or Adequate just because it's present and well-written — run the config drift check from Step 1 first. If it describes a step that's actually broken (tool invoked but never installed), score it Weak and correct it rather than leaving it alone.
 
 ### 5c: Present Gap Report
 
@@ -307,3 +324,5 @@ Run this checklist internally before presenting any generated content. Do not sh
 - [ ] Professional but approachable tone (or matches existing tone in improve mode)
 - [ ] No passive voice in key statements
 - [ ] Content is factually correct based on the codebase analysis
+- [ ] If a Status section is included, every phase's status was checked against code/tests/git history — not copied from the plan doc's own checkboxes
+- [ ] If CI config is described anywhere, its invoked tools were checked against the dependency manifest (config drift check) before calling the pipeline working
