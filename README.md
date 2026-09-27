@@ -1,8 +1,26 @@
 # make-readme
 
+Works with: Claude Code · Codex · Antigravity · Gemini CLI
+
 A Claude Code skill that generates or improves README.md files for any GitHub project. Analyzes the codebase — package manifests, directory structure, CI config, existing docs — and produces a well-structured, GitHub-flavored markdown README tailored to the detected project type.
 
 Works in two modes: **create mode** (no README exists) generates a complete file from scratch; **improve mode** (README exists) performs a gap analysis and enhances the existing file in-place, preserving the author's voice. After the README is done, offers to create companion files like CONTRIBUTING.md, CODE_OF_CONDUCT.md, LICENSE, issue/PR templates, and — for projects that are themselves an agent skill or plugin — a `--help`/`:help` mechanism backed by `help.md`.
+
+## Table of Contents
+
+- [Highlights](#highlights)
+- [Installation](#installation)
+- [Compatibility](#compatibility)
+- [References](#references)
+- [Usage](#usage)
+- [Supported Project Types](#supported-project-types)
+- [Who It's For](#who-its-for)
+- [Project Structure](#project-structure)
+- [Development](#development)
+- [Contributing](#contributing)
+- [Changelog](#changelog)
+- [Related Resources](#related-resources)
+- [License](#license)
 
 ## Highlights
 
@@ -151,19 +169,30 @@ Pass arguments after `/make-readme` to override auto-detection:
 - **PHP** — composer.json
 - **Monorepos** — Turborepo, Lerna, pnpm workspaces, npm workspaces
 
+## Who It's For
+
+**Good fit if you:**
+- Want a README generated or improved from an actual codebase analysis (manifests, CI config, directory structure) rather than filled-in boilerplate
+- Use Claude Code, Codex, Antigravity, or Gemini CLI and want a skill you install by copying one file
+- Want an existing README improved in place, with your original voice and any custom sections preserved
+
+**Not a fit if you:**
+- Want a hosted/SaaS README generator with a web UI — this only runs inside a supported agent CLI, there's no separate app
+- Need automated enforcement (a CI check that fails a build on a stale README) — this is an interactive skill invoked on demand, not a linter
+
 ## Project Structure
 
 ```
-skill/SKILL.md              The skill — all prompt logic lives here
-skill/skills/make-readme/        Codex/Gemini CLI copy of the skill content
-skill/.codex-plugin/        Codex plugin manifest
-skill/gemini-extension.json Gemini CLI extension manifest
-skill/GEMINI.md             Gemini CLI context file (includes skill content)
-tests/fixtures/             5 minimal fake projects for testing
-tests/checklists/           Acceptance criteria (create, improve, companion files)
-tests/snapshots/            Reference outputs from fixture runs
-docs/plans/                 Implementation plan and phase summary
-docs/TESTING_GUIDELINES.md  Prompt-testing strategy
+skill/SKILL.md               The skill — all prompt logic lives here
+skill/related-resources.md   Optional user-authored blurb inserted into generated READMEs
+skill/skills/make-readme/    Codex/Gemini CLI copy of the skill content
+skill/.codex-plugin/         Codex plugin manifest
+skill/gemini-extension.json  Gemini CLI extension manifest
+skill/GEMINI.md              Gemini CLI context file (includes skill content)
+tests/fixtures/              5 minimal fake projects for testing
+tests/checklists/            Acceptance criteria (create, improve, companion files)
+tests/snapshots/             Reference outputs from fixture runs
+docs/TESTING_GUIDELINES.md   Prompt-testing strategy
 ```
 
 ## Development
@@ -200,6 +229,10 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for developmen
 
 See [CHANGELOG.md](CHANGELOG.md) for release history.
 
+## Related Resources
+
+If you find practical AI tooling like this useful, I talk about and release them regularly in my free newsletter [Leading in the AI Era](https://tlcmentor.substack.com). 2026 subscribers will get newsletter free forever.
+
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) © 2026 Keith MacKay

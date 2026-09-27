@@ -1,0 +1,1 @@
+If you find practical AI tooling like this useful, I talk about and release them regularly in my free newsletter [Leading in the AI Era](https://tlcmentor.substack.com). 2026 subscribers will get newsletter free forever.
