@@ -1,6 +1,6 @@
 {
   "name": "make-readme",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Use to generate or improve a project's README.md — analyzes the codebase and produces a tailored, well-structured README with optional companion files",
   "skills": "./skills/"
 }

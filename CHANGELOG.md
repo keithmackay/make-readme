@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-09-27
+
 ### Added
 
 - License section now includes a copyright line (`[LICENSE](LICENSE) © <year> <author>`), with author resolved from the LICENSE file, manifest, or `git config user.name` — flagged to the user for resolution if none is found
