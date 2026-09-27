@@ -107,13 +107,16 @@ Choose which sections to include based on the project:
 **Include conditionally:**
 - **Badges**: Only if user opted in (Step 4a)
 - **Table of Contents**: Only if the README has more than 5 sections
+- **Compatibility**: Only if the project runs across multiple distinct platforms/runtimes (e.g. a skill/plugin working in Claude Code, Codex, Antigravity, Gemini CLI; a library with multiple supported runtimes; an app with multiple OS targets) — verified from the manifest(s), not assumed
 - **API Reference**: Only for libraries — document main exports, function signatures, options
 - **Configuration**: Only if `.env.example`, config files, or environment variables are detected. Use table format.
 - **Architecture**: Only for monorepos or complex projects — describe package/module structure
 - **Roadmap**: Only if there's evidence (GitHub milestones, TODO comments, roadmap file)
 - **Status**: Only if the project has an explicit phased plan (see Step 1). One row per phase, verified against code/tests/git history — not the plan doc's own checkboxes
 - **Limitations**: Only for concrete, already-true gaps or deliberate scope cuts you've verified are real — not prospective work (that's Roadmap)
+- **Who It's For**: Only if the project has genuine, verifiable audience/scope boundaries (not every project does) — a short "good fit / not a good fit" pair of bullet lists
 - **Acknowledgments**: Only if the project clearly builds on other notable work
+- **Related Resources**: Only if a `related-resources.md` file exists in this skill's own folder (alongside `SKILL.md`) — see generation rules below
 
 ### 4c: Dry-Run Check
 
@@ -132,6 +135,7 @@ Follow these rules for each section:
 **Title**
 - Use the project name from the manifest
 - If badges were requested, place them on the line immediately after the H1
+- If a Compatibility section applies (see below) and the project is a skill/plugin/library with more than one supported platform, add a single compact line right after the title/badges naming the platforms at a glance (e.g. `Works with: Claude Code · Codex · Antigravity · Gemini CLI`) — this is in addition to, not instead of, the full Compatibility section further down
 
 **Description**
 - 2-4 sentences covering: what it does, why it exists, how it works (at a high level)
@@ -198,10 +202,29 @@ Follow these rules for each section:
 - State the license name
 - Link to the LICENSE file: `[MIT](LICENSE)` or similar
 - If no license is detected, use `> [!NOTE]` to suggest the user add one
+- If a license is detected, append a copyright line in the form `[<LICENSE>](LICENSE) © <current year> <author>`:
+  - Determine `<author>` from, in order: the LICENSE file's own copyright line, the manifest's `author`/`authors` field, or `git config user.name`
+  - If none of these yield a usable author name, omit the `©` clause entirely from the generated section — do NOT guess or invent a name. Flag this in the completion report (Step 4e/5f) so the user can pick how to resolve it (fill in a name themselves, pull it from somewhere not checked, or leave the license line bare)
+  - `<current year>` is today's actual year, not a year found in existing files
 
 **Table of Contents**
-- Markdown links to each H2 section
-- Place after Description, before Highlights
+- Markdown links to every H2 section that ends up in the final README, in order, including License
+- Place right after the Description (and after any intro blockquote/callout), before Highlights
+
+**Compatibility**
+- One row or bullet per supported platform/runtime, stating what's supported and any platform-specific caveat (e.g. "same `SKILL.md` works as-is" vs. "requires stripping platform-specific frontmatter")
+- Pull the platform list from actual evidence: install docs, manifest fields, or platform-specific files/dirs found in the codebase — never list a platform you haven't verified
+
+**Who It's For**
+- Two short bullet lists: what kind of user/use case this is a good fit for, and what it explicitly is not for
+- Every bullet must be a real, verifiable boundary (a documented limitation, a design decision found in the code/docs) — not a guess or a marketing angle
+- Plain bullets, no comparison tables against named competitors, no emoji-per-bullet
+
+**Related Resources**
+- Only generated if `related-resources.md` exists in this skill's own folder (next to `SKILL.md`) — this file is authored and maintained by whoever installed/customized this skill, never by the model
+- Read its contents and ask the user whether to include it verbatim in this README, optionally letting them add project-specific links above the boilerplate content
+- Never invent, edit, or rephrase the contents of `related-resources.md` — insert it as-is (plus any project-specific links the user adds)
+- Place it near the end, after Acknowledgments (if present) and before License
 
 **Roadmap**
 - Only include if there's actual evidence of planned work
@@ -225,8 +248,9 @@ Follow these rules for each section:
 2. Ensure a blank line between every section
 3. Run the Quality Checklist (Step 7) internally before presenting
 4. Present the complete README to the user
-5. Ask: "Does this look good? I can adjust any section, or we can move on to companion files."
-6. After the user approves (or after making requested changes), write the file to `README.md`
+5. If no author could be determined for the License copyright line (see License generation rules), tell the user and offer the options: supply a name now, point to where it can be found, or leave the license line without a `©` clause
+6. Ask: "Does this look good? I can adjust any section, or we can move on to companion files."
+7. After the user approves (or after making requested changes), write the file to `README.md`
 
 ## Step 5: Improve Mode
 
@@ -298,7 +322,8 @@ If the `tone` argument was provided, use that instead of matching the existing v
 1. Produce the complete improved README (not a diff — the full file)
 2. Run the Quality Checklist (Step 7) internally
 3. Present to the user, noting which sections were added or enhanced
-4. After approval, write to `README.md`
+4. If a License section is present or added and no author could be determined for the copyright line, tell the user and offer the options: supply a name now, point to where it can be found, or leave the license line without a `©` clause
+5. After approval, write to `README.md`
 
 ## Step 6: Companion Files
 
@@ -326,3 +351,6 @@ Run this checklist internally before presenting any generated content. Do not sh
 - [ ] Content is factually correct based on the codebase analysis
 - [ ] If a Status section is included, every phase's status was checked against code/tests/git history — not copied from the plan doc's own checkboxes
 - [ ] If CI config is described anywhere, its invoked tools were checked against the dependency manifest (config drift check) before calling the pipeline working
+- [ ] If a License section is included and a license is detected, it includes a copyright line with a real, verified author (or the missing-author flag was raised to the user — never an invented name)
+- [ ] If a Related Resources section is included, its content came verbatim from `related-resources.md` — never generated or rephrased
+- [ ] If a Compatibility or Who It's For section is included, every claim is backed by evidence found in the codebase — never invented for effect
