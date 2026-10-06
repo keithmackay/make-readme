@@ -90,6 +90,8 @@ If yes, select 3-6 relevant badges from this list using shields.io format:
 
 Use this format: `![Badge Name](https://img.shields.io/badge/...)` or the appropriate shields.io endpoint for the service.
 
+If the project has a public GitHub remote (check `git remote get-url origin`), also ask: "Would you like a Star History chart (star-history.com) near the bottom of the README?" If yes, include the Star History section (see generation rules in 4d). If there's no public GitHub remote, skip this question — not applicable.
+
 ### 4b: Select Sections
 
 Choose which sections to include based on the project:
@@ -117,6 +119,7 @@ Choose which sections to include based on the project:
 - **Who It's For**: Only if the project has genuine, verifiable audience/scope boundaries (not every project does) — a short "good fit / not a good fit" pair of bullet lists
 - **Acknowledgments**: Only if the project clearly builds on other notable work
 - **Related Resources**: Only if a `related-resources.md` file exists in this skill's own folder (alongside `SKILL.md`) — see generation rules below
+- **Star History**: Only if the repo has a public GitHub remote (check `git remote get-url origin`) and the user opts in when asked — see generation rules below
 
 ### 4c: Dry-Run Check
 
@@ -225,6 +228,17 @@ Follow these rules for each section:
 - Read its contents and ask the user whether to include it verbatim in this README, optionally letting them add project-specific links above the boilerplate content
 - Never invent, edit, or rephrase the contents of `related-resources.md` — insert it as-is (plus any project-specific links the user adds)
 - Place it near the end, after Acknowledgments (if present) and before License
+
+**Star History**
+- Only generated if the user opted in (Step 4a) to a repo with a confirmed public GitHub remote
+- Derive `<owner>/<repo>` from `git remote get-url origin` — never guess or invent it
+- Use this exact embed:
+  ```markdown
+  ## Star History
+
+  [![Star History Chart](https://api.star-history.com/svg?repos=<owner>/<repo>&type=Date)](https://star-history.com/#<owner>/<repo>&Date)
+  ```
+- Place it near the end, after Related Resources (if present) and before License
 
 **Roadmap**
 - Only include if there's actual evidence of planned work
@@ -354,3 +368,4 @@ Run this checklist internally before presenting any generated content. Do not sh
 - [ ] If a License section is included and a license is detected, it includes a copyright line with a real, verified author (or the missing-author flag was raised to the user — never an invented name)
 - [ ] If a Related Resources section is included, its content came verbatim from `related-resources.md` — never generated or rephrased
 - [ ] If a Compatibility or Who It's For section is included, every claim is backed by evidence found in the codebase — never invented for effect
+- [ ] If a Star History section is included, `<owner>/<repo>` came from `git remote get-url origin` — never guessed

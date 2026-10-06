@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+### Added
+
+- Optional **Star History** section (star-history.com chart), offered when the repo has a public GitHub remote — `<owner>/<repo>` is always derived from `git remote get-url origin`, never guessed
+
 ## [1.2.0] - 2026-09-27
 
 ### Added
