@@ -230,7 +230,9 @@ Follow these rules for each section:
 - Place it near the end, after Acknowledgments (if present) and before License
 
 **Star History**
-- Only generated if the user opted in (Step 4a) to a repo with a confirmed public GitHub remote
+- Never include this section, in either mode, without the user explicitly agreeing to it first — it is never auto-generated just because the repo has a public GitHub remote, and it is never bundled into a bulk "generate all Missing sections" approval
+- In Create Mode: only generated if the user opted in when asked in Step 4a
+- In Improve Mode: if the section is absent and the repo has a public GitHub remote, ask the same question from Step 4a as part of presenting the gap report (Step 5c) — do not list it as a plain "Missing" row that gets created by default along with everything else. If the user declines or doesn't respond affirmatively, leave it out and do not ask again later in the same run
 - Derive `<owner>/<repo>` from `git remote get-url origin` — never guess or invent it
 - Use this exact embed:
   ```markdown
@@ -291,6 +293,8 @@ For each section in the menu (Step 4b), assign a score:
 - **Missing**: Not present at all. Generate it.
 
 A Development/CI section that describes a lint, type-check, test, or build step is not automatically Strong or Adequate just because it's present and well-written — run the config drift check from Step 1 first. If it describes a step that's actually broken (tool invoked but never installed), score it Weak and correct it rather than leaving it alone.
+
+Star History is a special case even when "Missing": don't score it as a normal Missing section to be generated on approval of the gap report. See the opt-in rule under Star History's generation rules (Step 4d) — it needs its own explicit yes/no, asked separately from the rest of the gap report.
 
 ### 5c: Present Gap Report
 
